@@ -1,0 +1,12 @@
+#Load in the data into a Pandas data frame with read_csv() method
+url_link = 'https://raw.githubusercontent.com/pandas-dev/pandas/master/doc/data/titanic.csv'
+titanic = pd.read_csv(url_link)
+#print the first 10 rows
+titanic.head(10) 
+# Selecting  a column: it returns a Pandas Series (it is essentially a Numpy ndarray with an index)
+titanic['Sex']
+#Select one column using the DataFrame attribute.
+titanic.Sex
+#Exclude numeric columns from a DataFrame description
+import numpy as np
+titanic.describe(exclude=[np.number])
