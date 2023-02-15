@@ -1,0 +1,14 @@
+import pandas as pd
+
+# Load the Google Form responses as a DataFrame
+df = pd.read_csv('responses.csv')
+
+# Compute some summary statistics
+num_applicants = len(df)
+avg_age = df['Age'].mean()
+avg_experience = df['Years of experience'].mean()
+
+# Print the results
+print(f"Number of applicants: {num_applicants}")
+print(f"Average age: {avg_age:.1f}")
+print(f"Average years of experience: {avg_experience:.1f}")
