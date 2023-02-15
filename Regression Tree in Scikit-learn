@@ -1,0 +1,44 @@
+# Encode car as 0 and truck as 1.
+train['vtype'] = train.vtype.map({'car':0, 'truck':1})
+feature_cols = ['year', 'miles', 'doors', 'vtype']
+X = train[feature_cols]
+y = train.price
+from sklearn.tree import DecisionTreeRegressor
+treereg = DecisionTreeRegressor(random_state=1)
+treereg
+
+# Use leave-one-out cross-validation (LOOCV) to estimate the RMSE for this model.
+from sklearn.model_selection import cross_val_score
+scores = cross_val_score(treereg, X, y, cv=14, scoring='neg_mean_squared_error')
+np.mean(np.sqrt(-scores))
+
+
+#Tuning a regression tree
+# Try different values one by one.
+treereg = DecisionTreeRegressor(max_depth=1, random_state=1)
+scores = cross_val_score(treereg, X, y, cv=14, scoring='neg_mean_squared_error')
+np.mean(np.sqrt(-scores))
+
+# List of values to try:
+max_depth_range = list(range(1, 8))
+
+# List to store the average RMSE for each value of max_depth:
+RMSE_scores = []
+
+# Use LOOCV with each value of max_depth.
+for depth in max_depth_range:
+    treereg = DecisionTreeRegressor(max_depth=depth, random_state=1)
+    MSE_scores = cross_val_score(treereg, X, y, cv=14, scoring='neg_mean_squared_error')
+    RMSE_scores.append(np.mean(np.sqrt(-MSE_scores)))
+    
+    # Plot max_depth (x-axis) versus RMSE (y-axis).
+plt.plot(max_depth_range, RMSE_scores);
+plt.xlabel('max_depth');
+plt.ylabel('RMSE (lower is better)');
+
+# max_depth=3 was best, so fit a tree using that parameter.
+treereg = DecisionTreeRegressor(max_depth=3, random_state=1)
+treereg.fit(X, y)
+
+# "Gini importance" of each feature: the (normalized) total reduction of error brought by that feature.
+pd.DataFrame({'feature':feature_cols, 'importance':treereg.feature_importances_})
