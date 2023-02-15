@@ -1,0 +1,31 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Load the Google Analytics data as a DataFrame
+df = pd.read_csv('google_analytics_data.csv')
+
+# Filter the data to include only Google Ads traffic
+ads_df = df[df['Source/Medium'].str.contains('google / cpc', case=False)]
+
+# Compute the total number of clicks, impressions, and cost
+clicks = ads_df['Clicks'].sum()
+impressions = ads_df['Impressions'].sum()
+cost = ads_df['Cost'].sum()
+
+# Compute the click-through rate (CTR) and cost-per-click (CPC)
+ctr = clicks / impressions
+cpc = cost / clicks
+
+# Print the results
+print(f'Total clicks: {clicks}')
+print(f'Total impressions: {impressions}')
+print(f'Total cost: {cost:.2f}')
+print(f'CTR: {ctr:.2%}')
+print(f'CPC: {cpc:.2f}')
+
+# Plot a histogram of the cost-per-click distribution
+ads_df['Cost per Click'].hist(bins=20)
+plt.title('Cost-per-Click Distribution')
+plt.xlabel('Cost per Click')
+plt.ylabel('Frequency')
+plt.show()
