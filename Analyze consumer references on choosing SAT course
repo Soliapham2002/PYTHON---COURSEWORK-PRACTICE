@@ -1,0 +1,28 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Load the Google Form responses as a DataFrame
+df = pd.read_csv('responses.csv')
+
+# Compute the frequency of each course reference method
+ref_counts = df['Course Reference'].value_counts()
+
+# Plot a bar chart of the reference frequencies
+ref_counts.plot(kind='bar')
+plt.title('Course Reference Methods')
+plt.xlabel('Reference Method')
+plt.ylabel('Frequency')
+plt.show()
+
+# Compute the average rating for each course feature
+feature_cols = ['Instructor Quality', 'Course Content', 'Price']
+avg_ratings = df[feature_cols].mean()
+
+# Plot a radar chart of the feature ratings
+categories = feature_cols
+values = avg_ratings.tolist()
+plt.figure(figsize=(6,6))
+plt.polar([*categories, categories[0]], [*values, values[0]], 'o-')
+plt.fill([*categories, categories[0]], [*values, values[0]], alpha=0.3)
+plt.title('Average Course Feature Ratings')
+plt.show()
